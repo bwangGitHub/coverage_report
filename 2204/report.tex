@@ -1,0 +1,53 @@
+\documentclass[a4paper]{article}
+\usepackage[a4paper]{geometry}
+\usepackage{amsmath}
+
+\title{22/04 Coverage Report}
+\author{
+Bingquan Wang      
+}
+\date{}
+\begin{document}       
+\maketitle
+
+\section{Replication}
+\begin{enumerate}
+	\item apache-poi: It errors when I run her scripts directly and I can not build the project in Laura's repository. From her repository, I believe she used version 3.8\_final. I downloaded from github, built it with Java-6 (errors with Java-7). Then I run her scripts, but it errors on one class "org.apache.poi.hssf.usermodel.TestUnfixedBugs". I removed the class and got the result, close to hers.
+	
+	\item closure: Again it errors when I run her scripts directly. I went on github for her version (closure-compiler-20130227). Built and run pit with her scripts, and needed to remove two test classes(com.google.javascript.jscomp.IntegrationTest and com.google.debugging.
+	sourcemap.Base64VLQTest). Then it errors again saying out of memory error. I have not fixed this error yet, but from what's on google, the cause might be "JVM could not load the mutant bytecode". There is no solution given, perhaps I need a computer with more memory?
+	
+	\item hsqldb: Everything works fine, but pit results show 0 kill. Results in her archive is also 0.
+	
+	\item jfreechart: Her build and her scripts, no error given but very low mutation score.
+	
+	\item joda-time: Her build and her scripts, similar results with hers but different in the paper.
+\end{enumerate}
+
+\section{Results}
+There are some projects have no pi-results, which in the table is not available.
+
+
+\begin{tabular}{|c|c|c|c|}
+	\hline
+	Project & result in paper & result in archive & replication result \\
+	apache-poi & 17935/27565 & 17935/27565 & 17381/26697 \\
+	closure & 27325/30779 & Not available & Failed \\
+	hsqldb & 50125/50302 & 0 & 0 \\
+	jfreechart & 23585/29699 & Not available & 9864/29699\\
+	joda-time & 8483/9552 & 7503/9552 & 7504/9552 \\
+	\hline
+\end{tabular}
+
+\section{Experiments with higher loads}
+
+One of our hypothesis is that the difference of killed mutants from our result to Laura's is caused by timeouts mutants. On PIT website, it does not clearly say how timeouts are treated (as killed or survived). To test our hypothesis, I increased my system load by running 2 pit tests of joda-time at the same time. And got the following results. From the results, I would say timeout is a reason of getting fewer killed mutants, and timeouts are treated as survived.
+
+\begin{tabular}{|c|c|c|c|}
+	\hline
+	Project & 1 pit: result & 2 pits: result 1 & 2 pits: result 2 \\
+	joda-time & 7541/9552 & 7489/9552 & 7504/9552 \\
+	\hline
+\end{tabular}
+ 
+\end{document}
