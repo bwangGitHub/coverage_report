@@ -18,12 +18,12 @@ Modified condition coverage(MCC)
 \subsection{Effectiveness}
 As mentioned in Section~\ref{sec:related}, there are two effectiveness introduced in this paper: raw effectiveness measurement and normalised effectiveness measurement. Author did not give mathematical expression for two effectiveness.
 
-Raw effectiveness is the number of killed mutants of a test suite divided by the number of killed mutants of master test suite. For a test suite t, master suite T and Program P, raw effectiveness should be:
+Raw effectiveness is the number of killed mutants of a test suite divided by the number of killed mutants of master test suite. For a test suite t, master suite T and program P, raw effectiveness should be:
 \[\textit{rawEffectiveness} = \frac{\#\textit{killedMutants(t,P)}}{\#\textit{killedMutants(T,P)}}\]
 
-For a test suite normalised effectiveness and is calculated by killed mutants of this suite over covered non-equivalent mutants of the same suite. Directly from authors' definiation we have the expression, for a test suite t and Program P:
+For a test suite normalised effectiveness and is calculated by killed mutants of this suite over covered non-equivalent mutants of the same suite. Directly from authors' definiation we have the expression, for a test suite t and program P:
 \[\textit{normalisedEffectiveness} = \frac{\#\textit{killedMutants(t,P)}}{\#\textit{coveredNon-equivalentMutants(t,P)}}\]
 
-A mutant can have three status for a particular test suite: covered and killed by test cases in this test suite, covered but not killed by this test suite but killed by test cases outside this test suite and surviving or equivalent. For a test suite t and Program P:
+A mutant can have three status for a particular test suite: covered and killed by test cases in this test suite, covered but not killed by this test suite but killed by test cases outside this test suite and surviving or equivalent. For a test suite t and program P:
 \[\textit{normalisedEffectiveness} = \frac{\#\textit{killedMutants(t,P)}}{\#\textit{totalCoveredMutants(t,P)} - \#\textit{equivalentMutants(t,P)}}\]
 \subsection{Correlation Measurement}
