@@ -1,0 +1,33 @@
+\section{Related Work}
+\label{sec:related}
+Most previous work considered correlation of code coverage criteria and ability of finding number of faults. It is natural for developers to manually insert faults to programs, and measure the number of seeded faults a test suite can detect, which is essentially the same as mutation test. Budd et al. proved mutation testing score is a stronger metric compare to other coverage criteria for test suite evaluation. Li et al, compared three code coverage criteria(edge pair, all use, prime path) with mutation testing, found that mutation testing is the best in detecting hand seeded faults in small programs. Despite the studies did not use large-scale SUTs, with the methodologies that minimise the bias, it is highly possible that mutation testing is better at evaluating test suites.
+
+Wong et al.～\cite{wong1994effect} investigated correlation between fault detection effectiveness and block coverage and correlation between fault detection effectiveness and size. They found that there is a correlation between block coverage and fault detection effectiveness. Also correlation between block coverage and fault detection effectiveness is higher than correlation between size and fault detection effectiveness. For this study, they believe that increasing the number of test cases in a test suite without increasing its coverage does not increase fault detection effectiveness.
+
+Hutchins et al.~\cite{hutchins1994experiments} 
+
+Andrew et al.~\cite{andrews2006using} studied behaviour of random selecting test suites and test suites constructed by adding test cases to improve test coverage, that is for the latter test suite if a test case does not increase coverage for a test suite, it is discarded and a new test case is selected. They found that for test suites with the same size, test suites consider coverage results better test effectiveness. Indirectly, it is saying there is a correlation between test effectiveness and coverage.
+
+A study by Namin et al.~\cite{namin2009influence} claimed that both coverage and size have effect on test suite effectiveness. They found a non-linear relationship between test suite size, coverage and test suite effectiveness. They introduced a maths model (log(size) + coverage) which they believed can be used to predict the test suite effectiveness.
+
+Cai et al.~\cite{cai2005effect} investigated relationship between test effectiveness and coverage metrics under different test profile: whole test set, functional test, random test, normal test, exceptional test. They found that for exceptional test, there is a significant correlation between test effectiveness and code coverage. There is no correlation for normal test. There is moderate correlation for functional and random test.
+
+Gopinath et al.~\cite{gopinath2014code} measured mutation score and coverage for more than 200 programs for their master suite and automatically generated test suites. They found there is correlation between coverage criteria and fault detection effectiveness for master suites and automatically generated suites. The correlation for master suite is stronger compare to automatically generated suites. They also claim that adding automatically generated suites to master suite does not necessarily increase test effectiveness. So size of test suite is not strongly correlated with effectiveness. (This is Alex work, the other paper we wanted to replicate)
+
+This replication study is about a resent work from Inozemtseva et al.~\cite{inozemtseva2014coverage}. They studied correlation between different coverage and test effectiveness. The procedure used in this research is as follows:
+	\begin{enumerate}
+		\item Use a mutation testing tool(PIT) to produce faulty program and determine mutants killed by all test cases.
+		\item Generate a large number of test suites by randomly selecting tests cases from test cases pool, until the test suite reaches its pre-defined size.
+		\item Measure coverage criteria for different test suites.
+		\item Determine effectiveness of different test suites from mutant status.
+		\item Analyse correlation between different coverage criteria and effectiveness.
+	\end{enumerate}
+
+Unlike ealier studies which most of them used mutation testing score directly as effectiveness of fault detection. Inozemtseva et al.~\cite{inozemtseva2014coverage} defined two effectiveness measures, \textit{raw effectiveness measurement} and \textit{normalised effectiveness measurement}. "The raw kill score is the number of mutants a test suite detected divided by the total number of
+non-equivalent mutants that were generated for the subject program under test."~\cite{inozemtseva2014coverage}. "The normalized effectiveness measure-ment is the number of mutants a test suite detected divided by the number of non-equivalent mutants it covers."~\cite{inozemtseva2014coverage}. A test suite cover the mutant means test cases in the test suite execute the mutated line of code. Or the mutant can be detected by the test suite. 
+
+The reason to introduce this normalised effectiveness is that when test suite is controlled, there are limited lines of code and mutants it covers. Authors are more interested in effectiveness compare to the suite with same size. For example, test suite A kills 10 mutants and test suite B kills 100 mutants, for raw effectiveness suite B is certainly higher. If suite A has only 12 covered non-equivalent mutants and suite B has 200, suite A will have a higher normalised effectiveness than suite B.
+
+The result of Inozemtseva et al.'s work is that when test suite size is not controlled, there is moderate to high correlation between all code coverage criteria and normalised effectiveness; when test suite size is controlled, there is low to moderate correlation between all coverage types and normalised effectiveness. Which indirectly is saying size is a confounding factor.
+
+As above studies show, most studies claim that there is some relationship between coverage, size and test effectiveness. But they do not agree to each other about how strong the relationship is.

@@ -1,0 +1,74 @@
+\section{Methodology}
+\subsection{Subjects under test}
+The original paper used five following subject programs: 
+\begin{enumerate}
+	\item Apache POI~\cite{apachepoi}: a Java API for Microsoft Documents
+	\item Closure~\cite{closure}: a tool for making JavaScript download and run faster.
+	\item HSQLDB~\cite{hsqldb}: a Java SQL relational database.
+	\item JfreeChart~\cite{jfreechart}: a Java chart library for users to display professional quality charts.
+	\item Joda Time~\cite{jodatime}: A replacement for Java time and date class
+\end{enumerate}
+
+These five subjects are selected on purpose using the following criteria:
+\begin{enumerate}
+	\item The program needs to be large enough to have more than 100,000 SLOC;
+	\item It needs to be an actively developed Java program;
+	\item It contains at least 1000 test cases;
+	\item The project needs to use Ant as its build system;
+	\item The project uses JUnit as a test harness.
+\end{enumerate}
+
+However no versions or git hashes of subject programs were given in the original paper or in its artefact page. As the original paper was published in 2014, various number of test subjects versions between 2012 to 2014 were examined with different PIT versions, but there was no result that was close enough to what was reported in the original paper. We contacted authors of the original paper, and acquired their project repository.  
+
+There are some environment settings need to be adjusted locally. Mutation testing tool PIT used for this project requires green test suite, which means all tests must pass. During my replication, some projects provided by the author could not compile or did not pass all tests. The first Java compiler used in the replication was Java 8, but non of the projects passed all tests. HSQLDB, JfreeChart, Joda Time worked with no errors using Java 7. According to ant build system, recommanded Java compiler for Closure was Java 6, but non of the compiler version complied it successfully. For Apache POI, Java 6 and 7 could compile but resulted failing tests.
+
+There was no command to exclude failing tests in author's repository, and the report log suggests the Apache POI and Closure were working correctly. I downloaded fresh source code from GitHub according to author's repository. Table~\ref{tab:sut} is a summary of projects and compiler version. Java 7 was selected as final replication compiler.
+
+
+\begin{table}
+	\caption{Java Compiler Setting}
+	\label{tab:sut}
+	\begin{minipage}{\columnwidth}
+		\begin{center}
+			\begin{tabular}{|l|l|c|c|c|c|c|c|}
+				\hline
+				&&\multicolumn{2}{|c|}{Java 6}&\multicolumn{2}{|c|}{Java 7}&\multicolumn{2}{|c|}{Java 8}\\
+				\hline
+				Project & Version & Compile & Test & Compile & Test & Compile & Test \\
+				\hline
+				Apache POI & 3.9-FINAL(author) & Success & Fail & Success & Fail & Success & Fail \\
+				& 3.9-FINAL(GitHub) & Success & Success& Success& Success & Success& Fail \\
+				\hline
+				Closure& 20130227(author) & Fail & Fail & Fail & Fail & Fail & Fail \\
+				&20130227(GitHub) & Success & Success & Success & Success & Success & Fail \\
+				\hline
+				HSQLDB & 2.2.8 & Success & Success & Success & Success & Success & Fail \\
+				\hline
+				JfreeChart & 1.0.8 & Success & Success & Success & Success & Success & Fail \\
+				\hline
+				Joda Time & 2.0 & Success & Success & Success & Success & Success & Fail \\
+				\hline
+			\end{tabular}
+		\end{center}
+		\bigskip
+	\end{minipage}
+\end{table}
+
+To get working repositories for Apache POI and Closure, I fetched original GitHub repository according to authors' version.
+
+The final environment settings used in this replication study are:
+\begin{itemize}
+	\item Operating System: Ubuntu 14.04.5 LTS;
+	\item Java Compiler: 1.7.0\_u131;
+	\item ant build system: 1.9.3;
+	\item JUnit: 3.8 for compiling projects, 4.10 for running PIT;
+	
+Other systems should work, as long as using Java compiler 7.
+\end{itemize}
+
+
+\subsection{Mutation Testing}
+Mutation testing of the program was conducted using an automated mutilation testing tool PIT. 
+\subsection{Test suite generation}
+\subsection{Coverage Measurement}
+\subsection{Measuring Effectiveness}

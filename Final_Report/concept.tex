@@ -1,0 +1,29 @@
+\section{Basic Terminology}
+\subsection{Testing}
+\subsection{Mutation Testing}
+Mutation testing is a technique which tests if test suite can detect human seeded faults. Faulty programs are created by changing original program syntax which is called a mutant, each mutant contains a different syntactic change. Each mutant is executed against test suites, if the result is different to the original program, then the mutant is killed, otherwise the mutant has survived.
+
+For a surviving mutant, there are two possible reasons for it to happen. Either the test suite does not contain test cases cover the fault, or the mutant is syntactically different but semantically the same. Those mutants semantically the same are never killed and called equivalent mutants. Mutation score is the ration of number of killed mutants over the number of non-equivalent mutants. 
+
+Determine if a survived mutant is equivalent is undecidable for computers as shown in the previous study~\cite{budd1982two}. Currently, a very common practice in research is to assume the test suite is adequate and treat all surviving mutants as equivalent mutants. This is a overestimation of equivalent mutants but allows researchers to work on large programs.
+
+\subsection{Coverage Criteria}
+There are three coverage criteria used in the project: statement, decision and modified condition coverage.
+
+Statement coverage is the percentage of how many lines of statements have been executed for a particular test suite. 
+
+Decision coverage
+
+Modified condition coverage(MCC)
+\subsection{Effectiveness}
+As mentioned in Section~\ref{sec:related}, there are two effectiveness introduced in this paper: raw effectiveness measurement and normalised effectiveness measurement. Author did not give mathematical expression for two effectiveness.
+
+Raw effectiveness is the number of killed mutants of a test suite divided by the number of killed mutants of master test suite. For a test suite t, master suite T and Program P, raw effectiveness should be:
+\[\textit{rawEffectiveness} = \frac{\#\textit{killedMutants(t,P)}}{\#\textit{killedMutants(T,P)}}\]
+
+For a test suite normalised effectiveness and is calculated by killed mutants of this suite over covered non-equivalent mutants of the same suite. Directly from authors' definiation we have the expression, for a test suite t and Program P:
+\[\textit{normalisedEffectiveness} = \frac{\#\textit{killedMutants(t,P)}}{\#\textit{coveredNon-equivalentMutants(t,P)}}\]
+
+A mutant can have three status for a particular test suite: covered and killed by test cases in this test suite, covered but not killed by this test suite but killed by test cases outside this test suite and surviving or equivalent. For a test suite t and Program P:
+\[\textit{normalisedEffectiveness} = \frac{\#\textit{killedMutants(t,P)}}{\#\textit{totalCoveredMutants(t,P)} - \#\textit{equivalentMutants(t,P)}}\]
+\subsection{Correlation Measurement}

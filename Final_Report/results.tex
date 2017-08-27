@@ -1,0 +1,54 @@
+\section{Results}
+\subsection{PIT Laura's results}
+
+\begin{tabular}{|c|c|c|c|c|c|}
+	\hline
+	&Property & Apache POI & Closure & JFreeChart & Joda Time \\
+	\hline
+	Table 2 & Generated Mutant & 27565 & 30779 & 29699 & 9552\\
+	& Detected mutant & 17935 & 27325 & 23585 & 8483\\
+	& Equivalent mutant & 9630 & 3454 & 6114 & 1069\\
+	\hline
+	PIT default & Generated Mutant & 27565 & 30779 & 29699 & 9552\\
+	& Killed mutant & 17935 & 23178 & 9808 & 7503\\
+	& Covered live & 3458 & 3447 & 6106 & 1066\\
+	& Not covered & 6172 & 4154 & 13785 & 983\\
+	& Covered live + not covered & 9630 & 7601 & 19891 & 2049\\
+	\hline
+	Laura's & Surviving mutant & 3469& 3454& 6125& 1069\\
+	\hline
+\end{tabular}
+
+\subsection{Correlation Replication}
+
+Table 3, normalised effectiveness replicate
+
+\begin{tabular}{|c|c|c|}
+	\hline
+	& coverage type & JFreeChart  \\
+	\hline
+	Table 3 & Statement & 0.50 \\
+	& Decision & 0.53  \\
+	& Mod. Cod. & 0.53  \\
+	\hline
+	My random suite result & statement & 0.55 \\
+	& Decision & 0.57 \\
+	& Mod. Cod. &  0.57 \\
+	\hline
+\end{tabular}
+
+Table 4, raw effectiveness replicate
+
+\begin{tabular}{|c|c|c|}
+	\hline
+	& coverage type & JFreeChart \\
+	Table 4 & Statement & 0.91  \\
+	& Decision & 0.95  \\
+	& Mod. Cod. & 0.92  \\
+	\hline
+	My random suite result & statement & 0.90\\
+	& Decision & 0.92 \\
+	& Mod. Cod. & 0.91 \\
+	\hline
+\end{tabular}
+
