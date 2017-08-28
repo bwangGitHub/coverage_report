@@ -14,20 +14,13 @@ Cai et al.~\cite{cai2005effect} investigated relationship between test effective
 
 Gopinath et al.~\cite{gopinath2014code} measured mutation score and coverage for more than 200 programs for their master suite and automatically generated test suites. They found there is correlation between coverage criteria and fault detection effectiveness for master suites and automatically generated suites. The correlation for master suite is stronger compare to automatically generated suites. They also claim that adding automatically generated suites to master suite does not necessarily increase test effectiveness. So size of test suite is not strongly correlated with effectiveness. (This is Alex work, the other paper we wanted to replicate)
 
-This replication study is about a resent work from Inozemtseva et al.~\cite{inozemtseva2014coverage}. They studied correlation between different coverage and test effectiveness. The procedure used in this research is as follows:
-	\begin{enumerate}
-		\item Use a mutation testing tool(PIT) to produce faulty program and determine mutants killed by all test cases.
-		\item Generate a large number of test suites by randomly selecting tests cases from test cases pool, until the test suite reaches its pre-defined size.
-		\item Measure coverage criteria for different test suites.
-		\item Determine effectiveness of different test suites from mutant status.
-		\item Analyse correlation between different coverage criteria and effectiveness.
-	\end{enumerate}
+This replication study is about a resent work from Inozemtseva et al.~\cite{inozemtseva2014coverage}. They studied correlation between different coverage and test effectiveness.
 
 Unlike ealier studies which most of them used mutation testing score directly as effectiveness of fault detection. Inozemtseva et al.~\cite{inozemtseva2014coverage} defined two effectiveness measures, \textit{raw effectiveness measurement} and \textit{normalised effectiveness measurement}. "The raw kill score is the number of mutants a test suite detected divided by the total number of
-non-equivalent mutants that were generated for the subject program under test."~\cite{inozemtseva2014coverage}. "The normalized effectiveness measure-ment is the number of mutants a test suite detected divided by the number of non-equivalent mutants it covers."~\cite{inozemtseva2014coverage}. A test suite cover the mutant means test cases in the test suite execute the mutated line of code. Or the mutant can be detected by the test suite. 
+non-equivalent mutants that were generated for the subject program under test."~\cite{inozemtseva2014coverage}. "The normalized effectiveness measurement is the number of mutants a test suite detected divided by the number of non-equivalent mutants it covers."~\cite{inozemtseva2014coverage}. A test suite cover the mutant means test cases in the test suite execute the mutated line of code. Or the mutant can be detected by the test suite. 
 
-The reason to introduce this normalised effectiveness is that when test suite is controlled, there are limited lines of code and mutants it covers. Authors are more interested in effectiveness compare to the suite with same size. For example, test suite A kills 10 mutants and test suite B kills 100 mutants, for raw effectiveness suite B is certainly higher. If suite A has only 12 covered non-equivalent mutants and suite B has 200, suite A will have a higher normalised effectiveness than suite B.
+The reason to introduce this normalised effectiveness is that when size of test suite is controlled, there are limited lines of code and mutants it covers. Authors are more interested in effectiveness relative to the test suite itself. For example, test suite A kills 10 mutants and test suite B kills 100 mutants, for raw effectiveness suite B is certainly higher. If suite A has only 12 covered non-equivalent mutants and suite B has 200, suite A will have a higher normalised effectiveness than suite B.
 
-The result of Inozemtseva et al.'s work is that when test suite size is not controlled, there is moderate to high correlation between all code coverage criteria and normalised effectiveness; when test suite size is controlled, there is low to moderate correlation between all coverage types and normalised effectiveness. Which indirectly is saying size is a confounding factor.
+The result of Inozemtseva et al.'s work is that when test suite size is not controlled, there is moderate to high correlation between all code coverage criteria and effectiveness; when test suite size is controlled, there is low to moderate correlation between all coverage types and effectiveness. Also indirectly saying size is a confounding factor.
 
 As above studies show, most studies claim that there is some relationship between coverage, size and test effectiveness. But they do not agree to each other about how strong the relationship is.

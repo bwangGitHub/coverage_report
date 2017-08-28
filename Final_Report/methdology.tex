@@ -1,4 +1,17 @@
 \section{Methodology}
+\subsection{Procedure}
+The procedure used in this research is as follows:
+\begin{enumerate}
+	\item Use a mutation testing tool(PIT) to produce faulty program and run mutants against master test suite. Get mutant status for every test case.
+	\item Generate a large number of test suites by randomly selecting tests cases from master test suite, until the test suite reaches its pre-defined size.
+	\item For each test suite:
+	\begin{itemize}
+		\item Measure coverage criteria (CodeCover) for different test suites.
+		\item Determine effectiveness of different test suites using mutation information and coverage criteria.
+	\end{itemize}
+	\item Analyse correlation between different coverage criteria and effectiveness.
+\end{enumerate}
+
 \subsection{Subjects under test}
 The original paper used five following subject programs: 
 \begin{enumerate}
@@ -18,11 +31,28 @@ These five subjects are selected on purpose using the following criteria:
 	\item The project uses JUnit as a test harness.
 \end{enumerate}
 
-However no versions or git hashes of subject programs were given in the original paper or in its artefact page. As the original paper was published in 2014, various number of test subjects versions between 2012 to 2014 were examined with different PIT versions, but there was no result that was close enough to what was reported in the original paper. We contacted authors of the original paper, and acquired their project repository.  
+However no versions or git hashes of subject programs were given in the original paper or in its artefact page. As the original paper was published in 2014, various number of test subjects versions between 2012 to 2014 were examined with different PIT versions, but there was no result that was close enough to what was reported in the original paper. Figure~\ref{fig:jodamutant} and figure~\ref{fig:jodakilled} are examples of different versions of Joda Time running against PIT version 1.0.0. We contacted authors of the original paper, and acquired their project repository.
 
-There are some environment settings need to be adjusted locally. Mutation testing tool PIT used for this project requires green test suite, which means all tests must pass. During my replication, some projects provided by the author could not compile or did not pass all tests. The first Java compiler used in the replication was Java 8, but non of the projects passed all tests. HSQLDB, JfreeChart, Joda Time worked with no errors using Java 7. According to ant build system, recommanded Java compiler for Closure was Java 6, but non of the compiler version complied it successfully. For Apache POI, Java 6 and 7 could compile but resulted failing tests.
 
-There was no command to exclude failing tests in author's repository, and the report log suggests the Apache POI and Closure were working correctly. I downloaded fresh source code from GitHub according to author's repository. Table~\ref{tab:sut} is a summary of projects and compiler version. Java 7 was selected as final replication compiler.
+\begin{figure}
+	\centering
+	\begin{minipage}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Figure/joda_mutant.png}
+		\caption{Joda Time total mutants}
+		\label{fig:jodamutant}
+	\end{minipage} %
+	\begin{minipage}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Figure/joda_kill.png}
+		\caption{Joda Time killed mutants}
+		\label{fig:jodakilled}
+	\end{minipage}
+\end{figure}
+
+There are some environment settings need to be adjusted locally. Mutation testing tool PIT used for this project requires green test suite, which means all tests must pass. During my replication, some projects provided by the author could not compile or did not pass all tests. The first Java compiler used in the replication was Java 8, but non of the projects passed all tests. HSQLDB, JfreeChart, Joda Time worked with no errors using Java 7. According to ant build system, recommanded Java compiler for Closure was Java 6, but non of the compiler version complied it successfully. For Apache POI, Java 6 and 7 compilation was successful but resulted failing tests.
+
+There was no command to exclude failing tests in author's repository, and the report log suggests the Apache POI and Closure were working correctly. I downloaded source code from GitHub according to author's repository. Table~\ref{tab:sut} is a summary of projects and compiler version. Java 7 was selected as final replication compiler.
 
 
 \begin{table}
@@ -36,8 +66,8 @@ There was no command to exclude failing tests in author's repository, and the re
 				\hline
 				Project & Version & Compile & Test & Compile & Test & Compile & Test \\
 				\hline
-				Apache POI & 3.9-FINAL(author) & Success & Fail & Success & Fail & Success & Fail \\
-				& 3.9-FINAL(GitHub) & Success & Success& Success& Success & Success& Fail \\
+				Apache POI & 3.9(author) & Success & Fail & Success & Fail & Success & Fail \\
+				& 3.9(GitHub) & Success & Success& Success& Success & Success& Fail \\
 				\hline
 				Closure& 20130227(author) & Fail & Fail & Fail & Fail & Fail & Fail \\
 				&20130227(GitHub) & Success & Success & Success & Success & Success & Fail \\
@@ -54,8 +84,6 @@ There was no command to exclude failing tests in author's repository, and the re
 	\end{minipage}
 \end{table}
 
-To get working repositories for Apache POI and Closure, I fetched original GitHub repository according to authors' version.
-
 The final environment settings used in this replication study are:
 \begin{itemize}
 	\item Operating System: Ubuntu 14.04.5 LTS;
@@ -63,7 +91,7 @@ The final environment settings used in this replication study are:
 	\item ant build system: 1.9.3;
 	\item JUnit: 3.8 for compiling projects, 4.10 for running PIT;
 	
-Other systems should work, as long as using Java compiler 7.
+Other systems should work, as long as using Java compiler 7, ant version greater than 1.8; and having JUnit 3 and JUnit 4  at the same time.
 \end{itemize}
 
 
