@@ -2,7 +2,7 @@
 \subsection{Procedure}
 The procedure used in this research is as follows:
 \begin{enumerate}
-	\item Use a mutation testing tool(PIT) to produce faulty program and run mutants against master test suite. Get mutant status for every test case.
+	\item Use a mutation testing tool (PIT) to produce faulty program and run it against master test suite. Get mutant status for every test case.
 	\item Generate a large number of test suites by randomly selecting tests cases from master test suite, until the test suite reaches its pre-defined size.
 	\item For each test suite:
 	\begin{itemize}
@@ -96,7 +96,53 @@ Other systems should work, as long as using Java compiler 7, ant version greater
 
 
 \subsection{Mutation Testing}
-Mutation testing of the program was conducted using an automated mutilation testing tool PIT. 
+Mutation testing of the program was conducted using an automated mutilation testing tool PIT, which is one of the most widely used open source Java mutation testing system. Version of PIT used for the original paper was 0.30-SNAPSHOT. PIT run tests against automatically generated mutants. Firstly it performs statement coverage for the tests, then use coverage information to pick test cases targeting a particular mutant.
+
+For a mutant, PIT report one of the following result status:
+\begin{itemize}
+	\item Killed: mutant has been killed by the test suite.
+	\item Live: mutant has survived.
+	\item No coverage: no test case executed the line of code where the mutant was created.
+	\item Time out: the mutants causes an infinite loop, for example mutate loop counter in a for loop.
+	\item Non viable: the mutant is invalid and can not be loaded by the Java Virtual Machine (JVM).
+	\item Memory error: the mutation requires more memory to be used by system.
+	\item Run error: there is something wrong when running the mutant.	
+\end{itemize}
+
+Under normal circumstances, there should be no non viable mutants or errors.
+
+Although author did not mention in the paper, she has made some modification to PIT. For the original PIT, if a mutant is killed by a test case, the test case is logged, then PIT moves to next mutant. So in the final report, only the first test case killed the mutant was reported. For the modified  PIT, a mutant run against all possible test cases target it, PIT moves to next mutant when all covered test cases are executed, and result for every test case and its corresponding mutant is logged in a log file. The modification is valid for 4 out of 5 subjects, but generated different results for HSQLDB compare to original PIT report. This will be discussed in more detail in section~\ref{subsec:resultPIT}
+
 \subsection{Test suite generation}
+
 \subsection{Coverage Measurement}
+Coverage criteria are measured using an open source Java coverage analysis tool CodeCover. Statement, decision and modified condition types are used in the project.
+
+Statement coverage is measured for the following statement type:
+\begin{itemize}
+	\item assignments and method calls
+	\item variable and member declaration with an assignment
+	\item break
+	\item continue
+	\item return
+	\item throw
+	\item empty statements
+\end{itemize}
+
+All condition statements such as if and for are not considered for statement coverage.
+
+Decision branches are measured for the branches:
+	\begin{itemize}
+		\item if-else statements, which have one branch for if and another for else
+		\item switch-case statements have a branch for each case and one for default
+		\item try-catch statements have a bran for every catch, one branch for exceptions not in catch cases and one branch for successful execution.
+	\end{itemize}
+
+MCC coverage consider the boolean expressions in:
+	\begin{itemize}
+		\item if
+		\item for
+		\item while and do...while
+	\end{itemize}
+Boolean expressions not in decision or looping statements are ignored, such as assignments and method parameters.
 \subsection{Measuring Effectiveness}

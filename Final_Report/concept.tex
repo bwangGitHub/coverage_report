@@ -7,7 +7,7 @@ Terminologies used for testing in general and for this paper are defined as foll
 	\item Master test suite: A test suite contain all test cases written by developer. In this paper, all test suites evaluated are strict subsets of the master test suite.
 \end{itemize}
 \subsection{Mutation Testing}
-Mutation testing is a technique which tests if test suite can detect human seeded faults. Faulty programs are created by changing original program syntax which is called a \textbf{mutant}, each mutant contains a different syntactic change. Every mutant is executed against test suites, if the result is different to the original program, then the mutant is \textbf{killed}, otherwise the mutant has \textbf{survived}.
+Mutation testing is a technique which tests if test suite can detect human seeded faults. Faulty programs are created by changing original program syntax which is called a \textbf{mutant}, each mutant contains a different syntactic change. Every mutant is executed against test suites, if the result is different to the original program, then the mutant has been \textbf{killed}, otherwise the mutant has \textbf{survived}.
 
 For a surviving mutant, there are two possible reasons for it to happen. Either the test suite does not contain test cases cover the fault, or the mutant is syntactically different but semantically the same. Those mutants semantically the same can never be killed, which are called \textbf{equivalent mutants}. For example, Algorithm~\ref{algo:A>B} is identical to algorithm~\ref{algo:A>=B} in terms of functionality. A particular mutant changing algorithm~\ref{algo:A>B} to algorithm~\ref{algo:A>=B} can never be detected. Mutation score by formal definition is the ratio of number of killed mutants over the number of non-equivalent mutants~\cite{jia2011analysis}. 
 
@@ -21,9 +21,8 @@ For a surviving mutant, there are two possible reasons for it to happen. Either 
 	{return B\;
 	}
 	\caption{Return the number with highest value}
+	\bigskip
 \end{algorithm}
-
-\bigskip
 
 \begin{algorithm}[H]
 	\label{algo:A>=B}
@@ -36,6 +35,7 @@ For a surviving mutant, there are two possible reasons for it to happen. Either 
 		return B\;
 	}
 	\caption{Return the number with highest value}
+	\bigskip
 \end{algorithm}
 
 Determine if a survived mutant is equivalent is undecidable for computers as shown in the previous study~\cite{budd1982two}. Currently, a very common practice in research is to assume the test suite is adequate and treat all surviving mutants as equivalent mutants~\cite{jia2011analysis}. This is a overestimation of equivalent mutants but allows researchers to work on large programs.
@@ -43,11 +43,24 @@ Determine if a survived mutant is equivalent is undecidable for computers as sho
 \subsection{Coverage Criteria}
 There are three coverage criteria used in the project: statement, decision and modified condition coverage.
 
-Statement coverage is the percentage of how many lines of statements have been executed for a particular test suite. 
+Statement coverage is the percentage of how many lines of statements of the program code have been executed for a particular test suite. For 100\% statement coverage, each statement need to be executed at least once.
 
-Decision coverage
+Decision coverage is a measure of how many decision branches have been executed, such as if-else, switch and try-catch branches. The difference of decision coverage to statement coverage is that all \textit{else} branches need to be executed even there is no code in \textit{else} branch.  For algorithm~\ref{algo:if}, a test case of condition value being true will give full statement coverage but only half decision coverage. To achieve full decision coverage, both true and false condition needs to be tested.
 
-Modified condition coverage(MCC)
+\begin{algorithm}[H]
+	\label{algo:if}
+	\KwData{Boolean: condition}
+	\eIf{condition}{
+		statements\;
+	}
+	{
+	}
+	\caption{If-else with implicit else branch}
+	\bigskip
+\end{algorithm}
+
+Modified condition coverage (MCC) is a deeper measure for if statements. It considers decision expressions in if statements. A condition is the simplest boolean expression, which can not be further break down. And a decision is composed by conditions and boolean operators. MCC subsumes modified condition/decision coverage (MC/DC)~\cite{hayhurst2001practical}. For 100\% MC/DC coverage every condition (boolean expression) must at least once be shown to have effect to the overall result of decision. It is the most complicated and strongest coverage criterion out of three measured.
+
 \subsection{Effectiveness}
 As mentioned in Section~\ref{sec:related}, there are two effectiveness introduced in this paper: raw effectiveness measurement and normalised effectiveness measurement. Author did not give mathematical expression for two effectiveness.
 
