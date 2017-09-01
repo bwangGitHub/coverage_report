@@ -1,18 +1,39 @@
 \section{Concept}
 \subsection{Testing Terminology}
-Terminologies used for testing in general and for this paper are defined as follows:
+Terminologies used for unit testing in general and for this paper are defined as follows:
 \begin{itemize}
-	\item Test case/methods: a independent unit test. It isolates a fragment of code (normally a functional method) and validates its correctness. Ideally, unit test should not go outside its own method boundary. When methods interact with each other, it is more difficult to identify which component is the cause of failure. Test cases are sometimes also called test methods.
+	\item Test case/methods: an independent unit test. It isolates a fragment of code (normally a functional method) and validates its correctness. Ideally, unit test should not go outside its own method boundary. When methods interact with each other, it is more difficult to identify which component is the cause of failure. Test cases are sometimes also called test methods.
 	\item Test suite: a collection of test cases which are used to validate a set of behaviour.
 	\item Master test suite: A test suite contain all test cases written by developer. In this paper, all test suites evaluated are strict subsets of the master test suite.
 \end{itemize}
+
+\subsection{Coverage Criteria}
+There are three coverage criteria used in the project: statement, decision and modified condition coverage.
+
+Statement coverage is the percentage of how many lines of statements of the program code have been executed for a particular test suite. For 100\% statement coverage, each statement need to be executed at least once.
+
+Decision coverage is a measure of how many decision branches have been executed, such as if-else, switch and try-catch branches. The difference of decision coverage to statement coverage is that all \textit{else} branches need to be executed even there is no code in \textit{else} branch.  For Algorithm~\ref{algo:if}, a test case of condition value being true will give full statement coverage but only half decision coverage. To achieve full decision coverage, both true and false condition needs to be tested.
+
+\begin{algorithm}[H]
+	\KwData{Boolean: condition}
+	\eIf{condition}{
+		statements\;
+	}
+	{
+	}
+	\caption{If-else with implicit else branch}
+	\label{algo:if}
+	\bigskip
+\end{algorithm}
+
+Modified condition coverage (MCC) is a deeper measure for if statements. It considers decision expressions in if statements. A condition is the simplest boolean expression, which can not be further break down. And a decision is composed by conditions and boolean operators. MCC subsumes modified condition/decision coverage (MC/DC)~\cite{hayhurst2001practical}. For 100\% MC/DC coverage every condition (boolean expression) must at least once be shown to have effect to the overall result of decision. It is the most complicated and strongest coverage criterion out of three measured.
+
 \subsection{Mutation Testing}
 Mutation testing is a technique which tests if test suite can detect human seeded faults. Faulty programs are created by changing original program syntax which is called a \textbf{mutant}, each mutant contains a different syntactic change. Every mutant is executed against test suites, if the result is different to the original program, then the mutant has been \textbf{killed}, otherwise the mutant has \textbf{survived}.
 
-For a surviving mutant, there are two possible reasons for it to happen. Either the test suite does not contain test cases cover the fault, or the mutant is syntactically different but semantically the same. Those mutants semantically the same can never be killed, which are called \textbf{equivalent mutants}. For example, Algorithm~\ref{algo:A>B} is identical to algorithm~\ref{algo:A>=B} in terms of functionality. A particular mutant changing algorithm~\ref{algo:A>B} to algorithm~\ref{algo:A>=B} can never be detected. Mutation score by formal definition is the ratio of number of killed mutants over the number of non-equivalent mutants~\cite{jia2011analysis}. 
+For a surviving mutant, there are two possible reasons for it to happen. Either the test suite does not contain test cases cover the fault, or the mutant is syntactically different but semantically the same. Those mutants semantically the same can never be killed, which are called \textbf{equivalent mutants}. For example, Algorithm~\ref{algo:A>B} is identical to Algorithm~\ref{algo:A>=B} in terms of functionality. A particular mutant changing Algorithm~\ref{algo:A>B} to Algorithm~\ref{algo:A>=B} can never be detected. Mutation score by formal definition is the ratio of number of killed mutants over the number of non-equivalent mutants~\cite{jia2011analysis}. 
 
-\begin{algorithm}[H]
-	\label{algo:A>B}
+\begin{algorithm}[h]
 	\KwData{Integer A and Interger B}
 	\KwResult{Return the number with highest value }
 	\eIf{A $>$ B}{
@@ -21,11 +42,11 @@ For a surviving mutant, there are two possible reasons for it to happen. Either 
 	{return B\;
 	}
 	\caption{Return the number with highest value}
+	\label{algo:A>B}
 	\bigskip
 \end{algorithm}
 
-\begin{algorithm}[H]
-	\label{algo:A>=B}
+\begin{algorithm}[h]
 	\KwData{Integer A and Interger B}
 	\KwResult{Return the number with highest value }
 	\eIf{A $>=$ B}{
@@ -35,41 +56,8 @@ For a surviving mutant, there are two possible reasons for it to happen. Either 
 		return B\;
 	}
 	\caption{Return the number with highest value}
+	\label{algo:A>=B}
 	\bigskip
 \end{algorithm}
 
-Determine if a survived mutant is equivalent is undecidable for computers as shown in the previous study~\cite{budd1982two}. Currently, a very common practice in research is to assume the test suite is adequate and treat all surviving mutants as equivalent mutants~\cite{jia2011analysis}. This is a overestimation of equivalent mutants but allows researchers to work on large programs.
-
-\subsection{Coverage Criteria}
-There are three coverage criteria used in the project: statement, decision and modified condition coverage.
-
-Statement coverage is the percentage of how many lines of statements of the program code have been executed for a particular test suite. For 100\% statement coverage, each statement need to be executed at least once.
-
-Decision coverage is a measure of how many decision branches have been executed, such as if-else, switch and try-catch branches. The difference of decision coverage to statement coverage is that all \textit{else} branches need to be executed even there is no code in \textit{else} branch.  For algorithm~\ref{algo:if}, a test case of condition value being true will give full statement coverage but only half decision coverage. To achieve full decision coverage, both true and false condition needs to be tested.
-
-\begin{algorithm}[H]
-	\label{algo:if}
-	\KwData{Boolean: condition}
-	\eIf{condition}{
-		statements\;
-	}
-	{
-	}
-	\caption{If-else with implicit else branch}
-	\bigskip
-\end{algorithm}
-
-Modified condition coverage (MCC) is a deeper measure for if statements. It considers decision expressions in if statements. A condition is the simplest boolean expression, which can not be further break down. And a decision is composed by conditions and boolean operators. MCC subsumes modified condition/decision coverage (MC/DC)~\cite{hayhurst2001practical}. For 100\% MC/DC coverage every condition (boolean expression) must at least once be shown to have effect to the overall result of decision. It is the most complicated and strongest coverage criterion out of three measured.
-
-\subsection{Effectiveness}
-As mentioned in Section~\ref{sec:related}, there are two effectiveness introduced in this paper: raw effectiveness measurement and normalised effectiveness measurement. Author did not give mathematical expression for two effectiveness.
-
-Raw effectiveness is the number of killed mutants of a test suite divided by the number of killed mutants of master test suite. For a test suite t, master suite T and program P, raw effectiveness should be:
-\[\textit{rawEffectiveness} = \frac{\#\textit{killedMutants(t,P)}}{\#\textit{killedMutants(T,P)}}\]
-
-For a test suite normalised effectiveness and is calculated by killed mutants of this suite over covered non-equivalent mutants of the same suite. Directly from authors' definiation we have the expression, for a test suite t and program P:
-\[\textit{normalisedEffectiveness} = \frac{\#\textit{killedMutants(t,P)}}{\#\textit{coveredNon-equivalentMutants(t,P)}}\]
-
-Covered non-equivalent mutants need further decomposition. A mutant can have three status for a particular test suite: covered and killed by test cases in this test suite, covered but not killed by this test suite but killed by test cases outside this test suite and surviving or equivalent. Covered non-equivalent mutants are total mutants covered taking away surviving mutants. So the final equation of normalised effectiveness for a test suite t and program P is:
-\[\textit{normalisedEffectiveness} = \frac{\#\textit{killedMutants(t,P)}}{\#\textit{totalCoveredMutants(t,P)} - \#\textit{equivalentMutants(t,P)}}\]
-\subsection{Correlation Measurement}
+Determine if a surviving mutant is equivalent is undecidable for computers as shown in the previous study~\cite{budd1982two}. It requires human inspection to determine equivalent mutants which is time consuming. Currently, a very common practice in research is to assume the test suite is adequate and treat all surviving mutants as equivalent mutants~\cite{jia2011analysis}. This is a overestimation of equivalent mutants but allows researchers to work on large programs.

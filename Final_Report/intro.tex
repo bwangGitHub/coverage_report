@@ -3,7 +3,34 @@ Software testing is essential to increase quality of programs. It validates whet
 
 Test coverage is a measure of how much code of a program has been executed against a particular test suite. It is believed that higher the coverage, higher the chance to detect faults, because tests can never find faults which have never been executed. However, it is still an open question how strong test coverage criteria is related to effectiveness of detecting faults. There are different studies on this question, but an agreement has not been reached.
 
-A common understanding of code coverage is that it is useful in finding non-executed code, but is less useful in finding non-tested data input. Figure is an example of why code coverage may not be a good measure. Let us suppose we need a piece of code to tell us if input is greater than zero. And the specification is that only when input is greater than zero return true, otherwise return false. By having a test suite containing test cases greater than zero and less than zero, both code achieves 100\% statement coverage. However, without testing zero specifically, faulty version of program can never be revealed.
+A common understanding of code coverage is that it is useful in finding non-executed code, but is less useful in finding non-tested data input. Figure is an example of why code coverage may not be a good measure. Let us suppose we need a piece of code to tell us if input is greater than zero. And the specification is that only when input is greater than zero return true, otherwise return false, as shown in Algorithm~\ref{algo:correctgreater} and Algorithm~\ref{algo:faultygreater}. By having a test suite containing test cases greater than zero and less than zero, both code achieves 100\% statement coverage. However, without testing zero specifically, faulty version of program can never be revealed.
+
+\begin{algorithm}[h]	
+	\KwData{Integer }
+	\KwResult{return true when input is greater than 0 else return false }
+	\eIf{A $>$ 0}{
+		return true\;
+	}
+	{	return false\;
+	}
+	\caption{Determine if input is positive (correct)}
+	\label{algo:correctgreater}
+	\bigskip
+\end{algorithm}
+
+\begin{algorithm}[h]
+	\KwData{Integer A}
+	\KwResult{return true when input is greater than 0 else return false }
+	\eIf{A $>=$ 0}{
+		return ture\;
+	}
+	{
+		return false\;
+	}
+	\caption{Determine if input is positive (faulty)}
+	\label{algo:faultygreater}
+	\bigskip
+\end{algorithm}
 
 The other technique of measuring test suite quality is mutation testing. Mutation testing tests whether test cases of the software system can detect small human seeded faults. The higher the mutation testing score, the better the test quality, which means it is able to find more human seeded faults. Mutation testing score is one of the most informative measure for quality of test suites as it is a direct measure of fault detection ability. However, there are also two problems with mutation testing. Firstly, human seeded faults are simulations of real faults which are not be the same as real software faults, so ability of finding human seeded faults may not be the same as ability of finding real faults. Another problem is that mutation is difficult to implement, and takes a long time to run. So mutation testing has not been recommended in industry. 
 

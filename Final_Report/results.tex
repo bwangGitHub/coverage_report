@@ -1,54 +1,331 @@
 \section{Results}
-\subsection{PIT Laura's results}
+\subsection{PIT results}
 \label{subsec:resultPIT}
-\begin{tabular}{|c|c|c|c|c|c|}
-	\hline
-	&Property & Apache POI & Closure & JFreeChart & Joda Time \\
-	\hline
-	Table 2 & Generated Mutant & 27565 & 30779 & 29699 & 9552\\
-	& Detected mutant & 17935 & 27325 & 23585 & 8483\\
-	& Equivalent mutant & 9630 & 3454 & 6114 & 1069\\
-	\hline
-	PIT default & Generated Mutant & 27565 & 30779 & 29699 & 9552\\
-	& Killed mutant & 17935 & 23178 & 9808 & 7503\\
-	& Covered live & 3458 & 3447 & 6106 & 1066\\
-	& Not covered & 6172 & 4154 & 13785 & 983\\
-	& Covered live + not covered & 9630 & 7601 & 19891 & 2049\\
-	\hline
-	Laura's & Surviving mutant & 3469& 3454& 6125& 1069\\
-	\hline
-\end{tabular}
+At the beginning of our replication, with authors' SUT repositories and her suggested modified version of PIT, we were not able to reproduce results that were close enough to the original paper. We contacted author for help, she helped us to understand her log file and how she got the results.
 
-\subsection{Correlation Replication}
+As mentioned in section~\ref{subsec:mutationTesting}, for authors' modified PIT, there are information for every mutant and its corresponding test cases. For the number of surviving mutants, she counted the number of mutants logged as survived in her modified log. The number of detected mutants was calculated by subtracting number of surviving mutants from number of total generated mutants.
 
-Table 3, normalised effectiveness replicate
+However, PIT is more complicated than just have killed and surviving mutants as shown in section~\ref{subsec:mutationTesting}. Under normal circumstances, mutants can also have outcomes of not covered and time out. Whether not covered mutants are killed or surviving can not be detected by current test suite, so they are not reported as killed or surviving mutants. Time out mutants are considered as killed as they cause a infinite loop and force PIT to move to next mutant. Therefore the way she generate killed mutants was wrong, she did not consider mutants with outcome of not covered. Table~\ref{tab:pit} includes information extracted from her repository and paper without running PIT. 
 
-\begin{tabular}{|c|c|c|}
-	\hline
-	& coverage type & JFreeChart  \\
-	\hline
-	Table 3 & Statement & 0.50 \\
-	& Decision & 0.53  \\
-	& Mod. Cod. & 0.53  \\
-	\hline
-	My random suite result & statement & 0.55 \\
-	& Decision & 0.57 \\
-	& Mod. Cod. &  0.57 \\
-	\hline
-\end{tabular}
+For Apache POI, number of equivalent mutants reported in the paper is the same as adding surviving mutants and no covered mutants in PIT default report. Also number of killed mutants match with PIT default report. However for the other four projects, number of surviving mutants in the paper match with modified PIT log, and the number of killed mutants are calculated using total number of generated mutants subtract number of surviving mutants. From this we can tell for all five mutants, the numbers reported in the paper were wrong for two reasons. Firstly, not covered mutants were not considered. Secondly, the way she calculated the number of killed mutants was inconsistent.
 
-Table 4, raw effectiveness replicate
+Furthermore, looking at PIT default report and modified report, number of survived mutants do not match. For Apache PIT, Closure, JfreeChart and Joda Time, the difference is very small and can be accepted. But for HSQLDB, the difference is too significant to ignore. We investigated the cause, during the running of PIT, there were lots of standard error output. For normal process, if there are errors, PIT aborts and reports them. However, for HSQLDB, PIT run successfully along with reporting errors. PIT is a very complex system, it was not possible for us to resolve the problem and modify it to give correct results in the given time. Thus, we decided to discard usage of HSQLDB.
 
-\begin{tabular}{|c|c|c|}
-	\hline
-	& coverage type & JFreeChart \\
-	Table 4 & Statement & 0.91  \\
-	& Decision & 0.95  \\
-	& Mod. Cod. & 0.92  \\
-	\hline
-	My random suite result & statement & 0.90\\
-	& Decision & 0.92 \\
-	& Mod. Cod. & 0.91 \\
-	\hline
-\end{tabular}
+\begin{table}[h]
+	\caption{PIT Report}
+	\label{tab:pit}
+	\begin{minipage}{\columnwidth}
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|c|c|}
+				\hline
+				&Property & Apache POI & Closure & HSQLDB& JFreeChart & Joda Time \\
+				\hline
+				Original Paper & Generated Mutant & 27565 & 30779& 50302 & 29699 & 9552\\
+				& Detected mutant & 17935 & 27325 & 50125 &23585 & 8483\\
+				& Equivalent mutant & 9630 & 3454 & 177 &6114 & 1069\\
+				\hline
+				PIT default log & Generated Mutant & 27565 & 30779& 50302 & 29699 & 9552\\
+				& Killed mutant & 17935 & 23178 & 8150 &9808 & 7503\\
+				& Survived & 3458 & 3447 & 5376 &6106 & 1066\\
+				& Not covered & 6172 & 4154 & 36775 & 13785 & 983\\
+				& Survived + no covered & 9630 & 7601 & 42152 & 19891 & 2049\\
+				\hline
+				Modified log & Surviving mutant & 3469& 3454& 177 & 6125& 1069\\
+				\hline
+			\end{tabular}
+		\end{center}
+		\bigskip
+	\end{minipage}
+\end{table}
+
+Table~\ref{tab:pitrep} is PIT mutation testing replication result. For Apache POI and Closure, we fetched repository from GitHub as authors' could not compile and test straight away. For JFreeChart, and Joda time, we used repository as author provided. We used authors' modified PIT, as it provides essential mutant outcome for correlation analysis. For these four projects, we have got similar PIT results to original paper. The difference can be caused by randomness of PIT automation and different Java compiler version. The replication PIT results are used for further analysis in this study.
+
+\begin{table}[h]
+	\caption{Replication PIT Report}
+	\label{tab:pitrep}
+	\begin{minipage}{\columnwidth}
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|c|}
+				\hline
+				&Property & Apache POI & Closure & JFreeChart & Joda Time \\
+				\hline
+				PIT default log & Generated Mutant & 27565 & 30779 & 29699 & 9552\\
+				& Killed mutant & 17923 & 22841  &9868 & 7486\\
+				& Survived & 3466 & 3515 &6109 & 1074\\
+				& Not covered & 6176 & 4423 & 13722 & 992\\
+				\hline
+				Modified log & Surviving mutant & 3472 & 3518 & 6122& 1076\\
+				\hline
+			\end{tabular}
+		\end{center}
+		\bigskip
+	\end{minipage}
+\end{table}
+
+\subsection{Is Coverage Correlated With Effectiveness When Size Is Ignored?}
+When we analysis authors' data used for raw effectiveness, we found that the number of total killed mutants used in the calculation was wrong. Recall section~\ref{subsec:resultPIT} that row of detect mutant in table~\ref{tab:pit} also counts not covered mutant for three project: Closure, JFreeChart and Joda Time. These numbers were used as total killed mutants when calculating raw effectiveness. Thus the actual raw effectiveness for those three projects is:
+For random subtest t, master suite T and program P
+\[\textit{rawEffectiveness} = \frac{\#\textit{killedMutants(t,P)}}{\#\textit{killedMutants(T,P)} + \#\textit{notCoveredMutants(T,P)}}\]
+
+However this misuse of killed mutants did not affect overall correlation result. Adding total not covered mutants does not effect the ranking of raw effectiveness. Since correlation only interests in ranking of value,  In addition we validated the results of raw effectiveness by changing total number of killed mutants to what was reported in PIT default log and got identical results. So the raw effectiveness correlation of original is still valid despite the mistake of detected mutants.
+
+
+Our first interest is whether coverage is correlated with fault detection effectiveness when size is ignored. Table~\ref{tab:rawnosize} and table~\ref{tab:normalnosize} show the Kendall $\tau$ correlation coefficients for raw effectiveness and normalised effectiveness discussed in section~\ref{subsec:effectiveness}. All 4 projects showed high correlation between raw effectiveness and coverage criteria. When normalisation applied, the correlation decreased for every subject. JFreeChart drooped the most, from very high correlation to moderate while other projects still maintain high. So we can conclude that there is moderate to high correlation between coverage criteria and fault detection effectiveness when size is ignored. In other words, when size of test suite is ignored, the higher the coverage the more faults a test suite can detect fault. 
+
+\begin{table}[h]
+	\caption{Kendall correlation between raw effectiveness and coverage criteria when size is ignored}
+	\label{tab:rawnosize}
+	\begin{minipage}{0.7\columnwidth}
+		\begin{center}
+			\begin{tabular}{cccc|ccc}
+				\hline
+				& \multicolumn{3}{c}{Original} & \multicolumn{3}{c}{Replication} \\
+				\hline
+				Project & Statement & Decision & MCC & Statement & Decision & MCC  \\
+				\hline
+				Apache POI & 0.94 & 0.94 & 0.94 & 0.92 & 0.94 & 0.94 \\
+				JFreeChart & 0.91 & 0.95 & 0.92 & 0.90 & 0.92 & 0.90\\
+				Joda Time & 0.85 & 0.85 & 0.85 & 0.94 & 0.94 & 0.93 \\
+				\hline
+			\end{tabular}
+		\end{center}
+		\bigskip
+		\emph{Note:} All entries are significant at 99\% level
+	\end{minipage}
+\end{table}
+
+\begin{table}[h]
+	\caption{Kendall correlation between normalised effectiveness and coverage criteria when size is ignored}
+	\label{tab:normalnosize}
+	\begin{minipage}{0.7\columnwidth}
+		\begin{center}
+			\begin{tabular}{cccc|ccc}
+				\toprule
+				& \multicolumn{3}{c}{Original} & \multicolumn{3}{c}{Replication} \\
+				\hline
+				Project & Statement & Decision & MCC & Statement & Decision & MCC  \\
+				\hline
+				Apache POI & 0.75 & 0.76 & 0.77 & 0.77& 0.77 & 0.81 \\
+				JFreeChart &0.50 & 0.53 & 0.53 & 0.55 & 0.57 & 0.57 \\
+				Joda Time & 0.80 & 0.80 & 0.80 & 0.84 & 0.84 & 0.84 \\
+				\hline
+			\end{tabular}
+		\end{center}
+		\bigskip
+		\emph{Note:} All entries are significant at 99\% level
+	\end{minipage}
+\end{table}
+
+
+
+\subsection{Is Coverage Correlated With Effectiveness When Size Is Controlled?}
+We computed the Kendall τ correlation coefficient between effectiveness and coverage for each project, each suite size, each coverage type, and both effectiveness measures.
+
+In general, when test suite size was controlled, raw effectiveness measurements had moderate correlations with coverage and normalized effectiveness measurements had low to moderate correlations.
+
+For Joda Time, our replication result was very different to original paper as shown in Table~\ref{tab:jodaraw} and Table~\ref{tab:jodanorm}. For both raw and normalised effectiveness, original paper had near zero correlations for all type of coverage and any size. However, according to our replication, there is moderate correlation between raw effectiveness and all three coverage, and there is low correlation between normalised effectiveness and coverage.
+
+
+\begin{table}[h]
+	\caption{Apache POI Raw}
+	\label{tab:poiraw}
+	\begin{minipage}{0.7\columnwidth}
+		\begin{center}
+			\begin{tabular}{cccc|ccc}
+				\toprule
+				& \multicolumn{3}{c}{Original} & \multicolumn{3}{c}{Replication} \\
+				\hline
+				Size & Statement & Decision & MCC & Statement & Decision & MCC  \\
+				\hline
+				3   & 0.85 & 0.84 & 0.85 & 0.80 & 0.81 & 0.80\\
+				10  & 0.75 & 0.73 & 0.77 & 0.75 & 0.77 & 0.77\\
+				30  & 0.61 & 0.67 & 0.67 & 0.56  & 0.58  & 0.58 \\
+				100 & 0.51 & 0.48 & 0.46 & 0.55  & 0.52  & 0.55 \\
+				300 & 0.67 & 0.64 & 0.63 & 0.60  & 0.63  & 0.60 \\
+				1000 & 0.77 & 0.63 & 0.69 & 0.79  & 0.72 & 0.64 \\
+				\bottomrule
+			\end{tabular}
+		\end{center}
+		\bigskip
+		\emph{Note:} All entries are significant at 99\% level
+	\end{minipage}
+\end{table}
+
+\begin{table}[h]
+	\caption{Apache POI Normalised}
+	\label{tab:poinorm}
+	\begin{minipage}{0.7\columnwidth}
+		\begin{center}
+			\begin{tabular}{cccc|ccc}
+				\toprule
+				& \multicolumn{3}{c}{Original} & \multicolumn{3}{c}{Replication} \\
+				\hline
+				Size & Statement & Decision & MCC & Statement & Decision & MCC  \\
+				\hline
+				3   & -0.17 & -0.13 & -0.07 & -0.09\textborn & -0.08\textborn & -0.01\textborn \\
+				10  & 0.14 & 0.16 & 0.22 & 0.18 & 0.20 & 0.20\\
+				30  & 0.18 & 0.27 & 0.28 & 0.22 & 0.21  & 0.21 \\
+				100 & 0.15 & 0.21 & 0.21 & 0.27  & 0.30  & 0.32 \\
+				300 & 0.41 & 0.40 & 0.42 & 0.52  & 0.45  & 0.46 \\
+				1000 & 0.49 & 0.46 & 0.49 & 0.49  & 0.48 & 0.48 \\
+				\bottomrule
+			\end{tabular}
+		\end{center}
+		\bigskip
+		\emph{Note:} All entries are significant at 99\% level
+	\end{minipage}
+\end{table}
+
+\begin{table}[h]
+	\caption{Apache POI Raw}
+	\label{tab:closureraw}
+	\begin{minipage}{0.7\columnwidth}
+		\begin{center}
+			\begin{tabular}{cccc|ccc}
+				\toprule
+				& \multicolumn{3}{c}{Original} & \multicolumn{3}{c}{Replication} \\
+				\hline
+				Size & Statement & Decision & MCC & Statement & Decision & MCC  \\
+				\hline
+				3   & 0.79 & 0.80 & 0.80 &  &  & \\
+				10  & 0.71 & 0.72 & 0.69 &  &  & \\
+				30  & 0.69 & 0.73 & 0.70 &   &   &  \\
+				100 & 0.70 & 0.66 & 0.57 &   &   &  \\
+				300 & 0.65 & 0.62 & 0.56 &   &   &  \\
+				1000 & 0.52 & 0.52 & 0.46 &  &  &  \\
+				\bottomrule
+			\end{tabular}
+		\end{center}
+		\bigskip
+		\emph{Note:} All entries are significant at 99\% level
+	\end{minipage}
+\end{table}
+
+\begin{table}[h]
+	\caption{Closure Normalised}
+	\label{tab:closurenorm}
+	\begin{minipage}{0.7\columnwidth}
+		\begin{center}
+			\begin{tabular}{cccc|ccc}
+				\toprule
+				& \multicolumn{3}{c}{Original} & \multicolumn{3}{c}{Replication} \\
+				\hline
+				Size & Statement & Decision & MCC & Statement & Decision & MCC  \\
+				\hline
+				3   & 0.12 & 0.14 & 0.18 &  &  &  \\
+				10  & -0.14 & -0.13 & -0.04\textborn & &&\\
+				30  & -0.27 & -0.22 & -0.16 & && \\
+				100 & -0.04\textborn & -0.03\textborn & -0.01\textborn & && \\
+				300 & 0.12 & 0.12 & 0.15 & && \\
+				1000 & 0.12 & 0.10 & 0.13 & && \\
+				3000 & 0.13 & 0.17 & 0.19 &&&\\
+				\bottomrule
+			\end{tabular}
+		\end{center}
+		\bigskip
+		\emph{Note:} All entries are significant at 99\% level
+	\end{minipage}
+\end{table}
+ 
+\begin{table}[h]
+	\caption{Closure Raw}
+	\label{tab:jfreeraw}
+	\begin{minipage}{0.7\columnwidth}
+		\begin{center}
+			\begin{tabular}{cccc|ccc}
+				\toprule
+				& \multicolumn{3}{c}{Original} & \multicolumn{3}{c}{Replication} \\
+				\hline
+				Size & Statement & Decision & MCC & Statement & Decision & MCC  \\
+				\hline
+				3   & 0.70 & 0.84 & 0.56 & 0.73 & 0.85 & 0.57\\
+				10  & 0.66 & 0.83 & 0.68 & 0.59 & 0.68 & 0.56\\
+				30  & 0.65 & 0.78 & 0.69 & 0.40  & 0.40  & 0.37 \\
+				100 & 0.53 & 0.68 & 0.57 & 0.33  & 0.39  & 0.38 \\
+				300 & 0.46 & 0.64 & 0.56 & 0.40  & 0.54  & 0.51 \\
+				1000 & 0.46 & 0.62 & 0.60 & 0.38  & 0.60 & 0.59 \\
+				\bottomrule
+			\end{tabular}
+		\end{center}
+		\bigskip
+		\emph{Note:} All entries are significant at 99\% level
+	\end{minipage}
+\end{table}
+
+\begin{table}[h]
+	\caption{JfreeChart Normalised}
+	\label{tab:jfreenorm}
+	\begin{minipage}{0.7\columnwidth}
+		\begin{center}
+			\begin{tabular}{cccc|ccc}
+				\toprule
+				& \multicolumn{3}{c}{Original} & \multicolumn{3}{c}{Replication} \\
+				\hline
+				Size & Statement & Decision & MCC & Statement & Decision & MCC  \\
+				\hline
+				3   & -0.25 & -0.08 & -0.20 & -0.20 & -0.06\textborn & -0.18\\
+				10  & -0.42 & -0.26 & -0.33 & -0.32 & -0.21 & -0.26\\
+				30  & -0.28 & -0.17 & -0.19 & -0.02\textborn  & 0.03\textborn  & 0.05\textborn \\
+				100 & -0.09 & -0.01\textborn & 0.03\textborn & 0.00\textborn  & 0.08  & 0.14 \\
+				300 & 0.03\textborn & 0.11 & 0.20 & 0.01\textborn  & 0.10  & 0.21 \\
+				1000 & 0.06 & 0.13 & 0.20 &0.06\textborn  & 0.13 & 0.18 \\
+				\bottomrule
+			\end{tabular}
+		\end{center}
+		\bigskip
+		\emph{Note:} Entry marked with \textborn~is not significant at 99\% level
+	\end{minipage}
+\end{table}
+
+\begin{table}[h]
+	\caption{Joda Time Raw}
+	\label{tab:jodaraw}
+	\begin{minipage}{0.7\columnwidth}
+		\begin{center}
+			\begin{tabular}{cccc|ccc}
+				\toprule
+				& \multicolumn{3}{c}{Original} & \multicolumn{3}{c}{Replication} \\
+				\hline
+				Size & Statement & Decision & MCC & Statement & Decision & MCC  \\
+				\hline
+				3   & -0.04\textborn & -0.03\textborn & -0.05\textborn & 0.48 & 0.56 & 0.50\\
+				10  & 0.01\textborn & 0.00\textborn & 0.00\textborn & 0.52 & 0.60 & 0.54\\
+				30  & 0.00\textborn & 0.00\textborn & 0.00\textborn & 0.56  & 0.61  & 0.56 \\
+				100 & 0.00\textborn & 0.01\textborn & 0.04\textborn & 0.55  & 0.60  & 0.55 \\
+				300 & 0.03\textborn & 0.04\textborn & 0.04\textborn & 0.60  & 0.63  & 0.59 \\
+				1000 & 0.00\textborn & 0.01\textborn & 0.00\textborn & 0.69  & 0.72 & 0.64 \\
+				3000 & -0.01\textborn & 0.00\textborn & 0.00\textborn & 0.59 & 0.69 & 0.53 \\
+				\bottomrule
+			\end{tabular}
+		\end{center}
+		\bigskip
+		\emph{Note:} Entry marked with \textborn~is not significant at 99\% level
+	\end{minipage}
+\end{table}
+
+\begin{table}[h]
+	\caption{Joda Time Normalised}
+	\label{tab:jodanorm}
+	\begin{minipage}{0.7\columnwidth}
+		\begin{center}
+			\begin{tabular}{cccc|ccc}
+				\toprule
+				& \multicolumn{3}{c}{Original} & \multicolumn{3}{c}{Replication} \\
+				\hline
+				Size & Statement & Decision & MCC & Statement & Decision & MCC  \\
+				\hline
+				3   & -0.00\textborn & -0.00\textborn & -0.00\textborn & -0.00\textborn & -0.00\textborn & -0.01\textborn \\
+				10  & -0.02\textborn & -0.01\textborn & -0.01\textborn & 0.19 & 0.21 & 0.20\\
+				30  & -0.00\textborn & -0.00\textborn & -0.01\textborn & 0.15 & 0.17  & 0.21 \\
+				100 & -0.00\textborn & -0.01\textborn & 0.02\textborn & 0.27  & 0.30  & 0.32 \\
+				300 & 0.03\textborn & 0.04\textborn & 0.04\textborn & 0.33\textborn  & 0.35  & 0.36 \\
+				1000 & 0.00\textborn & 0.00\textborn & 0.00\textborn & 0.39  & 0.42 & 0.43 \\
+				3000 & -0.04\textborn & -0.03\textborn & - 0.02\textborn &0.10 & 0.15 & 0.18\\
+				\bottomrule
+			\end{tabular}
+		\end{center}
+		\bigskip
+		\emph{Note:} Entry marked with \textborn~is not significant at 99\% level
+	\end{minipage}
+\end{table}
 
