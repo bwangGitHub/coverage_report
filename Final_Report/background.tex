@@ -1,4 +1,4 @@
-\section{Concept}
+\section{Background}
 \subsection{Testing Terminology}
 Terminologies used for unit testing in general and for this paper are defined as follows:
 \begin{itemize}
@@ -12,9 +12,9 @@ There are three coverage criteria used in the project: statement, decision and m
 
 Statement coverage is the percentage of how many lines of statements of the program code have been executed for a particular test suite. For 100\% statement coverage, each statement need to be executed at least once.
 
-Decision coverage is a measure of how many decision branches have been executed, such as if-else, switch and try-catch branches. The difference of decision coverage to statement coverage is that all \textit{else} branches need to be executed even there is no code in \textit{else} branch.  For Algorithm~\ref{algo:if}, a test case of condition value being true will give full statement coverage but only half decision coverage. To achieve full decision coverage, both true and false condition needs to be tested.
+Decision coverage is a measure of how many decision branches have been executed, such as if-else, switch and try-catch branches. The difference of decision coverage to statement coverage is that all \textit{else} branches need to be executed even there is no code in \textit{else} branch. For Algorithm~\ref{algo:if}, a test case of condition value being true will give full statement coverage but only half decision coverage. To achieve full decision coverage, both true and false condition needs to be tested.
 
-\begin{algorithm}[H]
+\begin{algorithm}[t]
 	\KwData{Boolean: condition}
 	\eIf{condition}{
 		statements\;
@@ -31,10 +31,10 @@ Modified condition coverage (MCC) is a deeper measure for if statements. It cons
 \subsection{Mutation Testing}
 Mutation testing is a technique which tests if test suite can detect human seeded faults. Faulty programs are created by changing original program syntax which is called a \textbf{mutant}, each mutant contains a different syntactic change. Every mutant is executed against test suites, if the result is different to the original program, then the mutant has been \textbf{killed}, otherwise the mutant has \textbf{survived}.
 
-For a surviving mutant, there are two possible reasons for it to happen. Either the test suite does not contain test cases cover the fault, or the mutant is syntactically different but semantically the same. Those mutants semantically the same can never be killed, which are called \textbf{equivalent mutants}. For example, Algorithm~\ref{algo:A>B} is identical to Algorithm~\ref{algo:A>=B} in terms of functionality. A particular mutant changing Algorithm~\ref{algo:A>B} to Algorithm~\ref{algo:A>=B} can never be detected. Mutation score by formal definition is the ratio of number of killed mutants over the number of non-equivalent mutants~\cite{jia2011analysis}. 
+For a surviving mutant, there are two possible reasons for it to happen. Either the test suite does not contain test cases cover the fault, or for all test cases, the mutant is syntactically different but have the same behaviour as the original program. Those mutants have the same functionality to the test suite are called \textbf{equivalent mutants}. For example, Algorithm~\ref{algo:A>B} is identical to Algorithm~\ref{algo:A>=B} in terms of functionality. A particular mutant changing Algorithm~\ref{algo:A>B} to Algorithm~\ref{algo:A>=B} can never be detected. Mutation score by definition is the ratio of the number of killed mutants over the total number of mutants~\cite{jia2011analysis}. 
 
-\begin{algorithm}[h]
-	\KwData{Integer A and Interger B}
+\begin{algorithm}[t]
+	\KwData{Integer A and B}
 	\KwResult{Return the number with highest value }
 	\eIf{A $>$ B}{
 		return A\;
@@ -46,8 +46,8 @@ For a surviving mutant, there are two possible reasons for it to happen. Either 
 	\bigskip
 \end{algorithm}
 
-\begin{algorithm}[h]
-	\KwData{Integer A and Interger B}
+\begin{algorithm}[t]
+	\KwData{Integer A and B}
 	\KwResult{Return the number with highest value }
 	\eIf{A $>=$ B}{
 		return A\;
@@ -60,4 +60,4 @@ For a surviving mutant, there are two possible reasons for it to happen. Either 
 	\bigskip
 \end{algorithm}
 
-Determine if a surviving mutant is equivalent is undecidable for computers as shown in the previous study~\cite{budd1982two}. It requires human inspection to determine equivalent mutants which is time consuming. Currently, a very common practice in research is to assume the test suite is adequate and treat all surviving mutants as equivalent mutants~\cite{jia2011analysis}. This is a overestimation of equivalent mutants but allows researchers to work on large programs.
+Determine if a surviving mutant is equivalent is undecidable as shown in the previous study~\cite{budd1982two}. It requires human inspection to determine equivalent mutants which is time consuming. Currently, a very common practice in research is to assume the test suite is adequate and treat all surviving mutants as equivalent mutants~\cite{jia2011analysis}. This is a overestimation of equivalent mutants but allows researchers to apply mutation testing to large programs and use the killed and surviving mutants to improve the test suite.

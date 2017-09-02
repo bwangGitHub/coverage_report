@@ -5,7 +5,7 @@ Test coverage is a measure of how much code of a program has been executed again
 
 A common understanding of code coverage is that it is useful in finding non-executed code, but is less useful in finding non-tested data input. Figure is an example of why code coverage may not be a good measure. Let us suppose we need a piece of code to tell us if input is greater than zero. And the specification is that only when input is greater than zero return true, otherwise return false, as shown in Algorithm~\ref{algo:correctgreater} and Algorithm~\ref{algo:faultygreater}. By having a test suite containing test cases greater than zero and less than zero, both code achieves 100\% statement coverage. However, without testing zero specifically, faulty version of program can never be revealed.
 
-\begin{algorithm}[h]	
+\begin{algorithm}[t]	
 	\KwData{Integer }
 	\KwResult{return true when input is greater than 0 else return false }
 	\eIf{A $>$ 0}{
@@ -18,7 +18,7 @@ A common understanding of code coverage is that it is useful in finding non-exec
 	\bigskip
 \end{algorithm}
 
-\begin{algorithm}[h]
+\begin{algorithm}[t]
 	\KwData{Integer A}
 	\KwResult{return true when input is greater than 0 else return false }
 	\eIf{A $>=$ 0}{
